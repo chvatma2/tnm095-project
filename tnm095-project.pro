@@ -32,7 +32,13 @@ SOURCES += \
     gameobject.cpp \
     component.cpp \
     characterlistwidget.cpp \
-    characterwidget.cpp
+    characterwidget.cpp \
+    btnode.cpp \
+    btroot.cpp \
+    btselector.cpp \
+    btsequence.cpp \
+    btcondition.cpp \
+    btaction.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,4 +48,10 @@ HEADERS += \
     gameobject.h \
     component.h \
     characterlistwidget.h \
-    characterwidget.h
+    characterwidget.h \
+    btnode.h \
+    btroot.h \
+    btselector.h \
+    btsequence.h \
+    btcondition.h \
+    btaction.h
