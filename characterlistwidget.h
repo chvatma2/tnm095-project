@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 
 #include "gameobject.h"
+#include "characterwidget.h"
 
 class CharacterListWidget : public QWidget
 {
@@ -19,11 +20,12 @@ signals:
 public slots:
 
 private:
-    QMap<int, GameObject*> m_characters;
+    //QMap<int, GameObject*> m_characters;
     QScrollArea* m_scrollArea;
     QWidget* m_widgetList;
     QVBoxLayout* m_listLayout;
     QHBoxLayout* m_mainLayout;
+    QList<CharacterWidget*> m_characterList;
 };
 
 #endif // CHARACTERLISTWIDGET_H

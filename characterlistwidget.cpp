@@ -9,9 +9,16 @@ CharacterListWidget::CharacterListWidget(QVector<GameObject *> &characters, QWid
     m_widgetList = new QWidget(this);
     m_listLayout = new QVBoxLayout;
     m_widgetList->setLayout(m_listLayout);
-    for (auto character : characters)
+    for (GameObject* character : characters)
     {
         //TODO
+        CharacterWidget* newWidget = new CharacterWidget(character);
+        newWidget->setName(character->getVariable("name").toString());
+        newWidget->healthChange(character->getVariable("health").toInt());
+        newWidget->setLaziness(character->getVariable("laziness").toInt());
+        m_characterList.push_back(newWidget);
+        m_listLayout->addWidget(newWidget);
     }
+    m_listLayout->addStretch();
     m_scrollArea->setWidget(m_widgetList);
 }

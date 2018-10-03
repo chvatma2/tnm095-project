@@ -31,7 +31,8 @@ SOURCES += \
     aisubsystem.cpp \
     gameobject.cpp \
     component.cpp \
-    characterlistwidget.cpp
+    characterlistwidget.cpp \
+    characterwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,4 +41,5 @@ HEADERS += \
     aisubsystem.h \
     gameobject.h \
     component.h \
-    characterlistwidget.h
+    characterlistwidget.h \
+    characterwidget.h

@@ -45,6 +45,8 @@ void MainWindow::initializeUI()
     m_centralLayout = new QHBoxLayout;
     m_centralWidget = new QWidget;
     m_characterListWidget = new CharacterListWidget(m_characters);
+    m_characterListWidget->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
+    m_openGLWidget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     m_centralLayout->addWidget(m_characterListWidget);
     m_centralLayout->addWidget(m_openGLWidget);
     m_centralWidget->setLayout(m_centralLayout);
