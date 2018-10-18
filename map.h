@@ -32,6 +32,7 @@ public:
     int width() const;
     void renderTiles(QOpenGLShaderProgram *program);
     void init();
+    float traversalCostOfTile(int x, int y);
 
 private:
     void loadMapFromFile();
@@ -43,6 +44,7 @@ private:
     QHash<QPoint, GameObject*> m_resources;
     QHash<QPoint, GameObject*> m_buildings;
     QMap<QString, TileType> m_tileMapping{{"G", TileType::GRASS}};
+    QMap<TileType, float> m_tileTypeTraversalCost{{TileType::GRASS, 1.0f}};
     QMap<TileType, QImage*> m_terrainImages;
 };
 

@@ -73,6 +73,17 @@ void Map::init()
     }
 }
 
+float Map::traversalCostOfTile(int x, int y)
+{
+    float cost = m_tileTypeTraversalCost[m_terrain[x][y]];
+    if(m_buildings.contains(QPoint(x, y)))
+        return -1.0f;
+    if(m_resources.contains(QPoint(x, y)))
+        cost *= 1.5f;
+
+    return cost;
+}
+
 void Map::loadMapFromFile()
 {
     //Terrain

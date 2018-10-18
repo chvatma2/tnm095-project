@@ -6,6 +6,11 @@ BTRoot::BTRoot(BTNode *parent)
 
 }
 
+BTRoot::~BTRoot()
+{
+
+}
+
 void BTRoot::setChild(BTNode *child)
 {
     m_child = child;

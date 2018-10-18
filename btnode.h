@@ -12,6 +12,7 @@ class BTNode
 {
 public:
     BTNode(BTNode* parent = nullptr);
+    virtual ~BTNode();
     BTNode* parent() const;
     virtual void tick() = 0;
     State state() const;
