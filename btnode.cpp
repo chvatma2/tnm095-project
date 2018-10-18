@@ -9,3 +9,9 @@ BTNode *BTNode::parent() const
 {
     return m_parent;
 }
+
+State BTNode::state() const
+{
+    return m_currentState;
+}
+

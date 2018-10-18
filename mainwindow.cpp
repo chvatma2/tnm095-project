@@ -12,7 +12,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    resize(1200, 1000);
+    resize(1020, 820);
     initializeSubsystems();
     initializeUI();
     m_time.start();
@@ -38,14 +38,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::render(QOpenGLShaderProgram *program)
 {
-    int width = m_openGLWidget->width();
-    int height = m_openGLWidget->height();
-
-    int mapWidth = m_gameMap->width();
-    int mapHeight = m_gameMap->height();
-
-    int tileSizeX = width / mapWidth;
-    int tileSizeY = height / mapHeight;
     m_gameMap->renderTiles(program);
     for(auto entity : m_entities)
         entity->render(program);
@@ -105,6 +97,18 @@ void MainWindow::initializeOpenGLWidget()
 void MainWindow::initializeGameWorld()
 {
     m_gameMap = new Map(16, 16);
+
+    for(int i = 0; i < 13; ++i)
+    {
+        GameObject* tree = new GameObject;
+        SpriteComponent *spriteComp = new SpriteComponent(50, 50, new QImage("textures/tree.png"));
+        PositionComponent *posComp = new PositionComponent(QPointF(i, i%2));
+        tree->setComponent(ComponentType::SpriteComponent, spriteComp);
+        tree->setComponent(ComponentType::PositionComponent, posComp);
+        tree->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
+
+        m_entities.push_back(tree);
+    }
 }
 
 void MainWindow::initializeUI()

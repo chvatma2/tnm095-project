@@ -16,6 +16,8 @@ public:
     void update(PositionComponent *positionComponent);
 
 private:
+    void generateBehaviorTree();
+
     AgentComponent *m_agentComponent = nullptr;
     BTRoot *m_treeRoot = nullptr;
     BTNode *m_currentNode = nullptr;
