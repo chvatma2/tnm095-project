@@ -4,14 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
+LIBS += -lOpenGL32
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = tnm095-project
 TEMPLATE = app
 
-CONFIG += c++1z
+CONFIG += c++14
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
