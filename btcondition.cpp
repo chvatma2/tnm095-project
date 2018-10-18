@@ -8,8 +8,12 @@ BTCondition::BTCondition(AgentComponent *agentComponent, std::function<bool()> c
 
 void BTCondition::execute()
 {
+    qDebug() << "CONDITION";
     if(!m_child)
+    {
         m_parent->childFinished(false);
+        return;
+    }
     bool conditionResult = m_condition();
 
     if(conditionResult)

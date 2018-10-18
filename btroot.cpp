@@ -20,5 +20,5 @@ void BTRoot::execute()
 
 void BTRoot::childFinished(bool success)
 {
-    m_child->execute();
+    return;
 }

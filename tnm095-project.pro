@@ -50,7 +50,8 @@ SOURCES += \
     spritecomponent.cpp \
     rendercomponent.cpp \
     aicomponent.cpp \
-    btactionidle.cpp
+    btactionidle.cpp \
+    amountcomponent.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -73,4 +74,5 @@ HEADERS += \
     spritecomponent.h \
     rendercomponent.h \
     aicomponent.h \
-    btactionidle.h
+    btactionidle.h \
+    amountcomponent.h

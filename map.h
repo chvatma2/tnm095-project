@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include <QPoint>
+#include <QList>
 #include <QHash>
 #include <QOpenGLTexture>
 
@@ -48,6 +49,10 @@ public:
     int width() const;
     void renderTiles(QOpenGLShaderProgram *program);
     void init();
+    QList<QPoint> pathToClosestWood(QPointF from);
+    QList<QPoint> pathToClosestHouse(QPointF from);
+    QList<QPoint> pathToClosestDiner(QPointF from);
+
 
     //A*
     int findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer, float* cost); //Returns total distance from start to goal
@@ -57,6 +62,7 @@ private:
     void loadMapFromFile();
     void loadTextures();
     void createTiles();
+    QList<QPoint> rawBufferToPath(std::size_t *buffer, int length);
 
     //A*
     void investigate(node n);
