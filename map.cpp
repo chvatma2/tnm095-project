@@ -87,6 +87,7 @@ void Map::loadMapFromFile()
     {
         QString line = terrainFile.readLine();
         line.remove('\n');
+        line.remove('\r');
         QStringList wordList = line.split(',');
         int column = 0;
         for(auto word : wordList)
