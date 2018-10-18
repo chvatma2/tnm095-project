@@ -84,7 +84,7 @@ float Map::traversalCostOfTile(int x, int y)
     return cost;
 }
 
-int Map::findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer)
+int Map::findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer, float* cost)
 {
     std::size_t mapwidth = static_cast<std::size_t>(width());
     std::size_t mapheight = static_cast<std::size_t>(height());
@@ -122,6 +122,7 @@ int Map::findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOu
         if (hCosts[goalIndex] != -1)
         {
             findShortestPath(hCosts[goalIndex], pOutBuffer);
+            *cost = goal.fCost;
             return hCosts[goalIndex];
         }
         else
@@ -208,6 +209,7 @@ void Map::investigate(node n)
     // check if the node is the target
        if (n.index == goalIndex)
        {
+           goal = n;
            targetFound = true;
            hCosts[n.index] = n.hCost;
            parents[n.index] = n.parent;

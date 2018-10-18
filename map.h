@@ -50,7 +50,7 @@ public:
     void init();
 
     //A*
-    int findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer); //Returns total distance from start to goal
+    int findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer, float* cost); //Returns total distance from start to goal
     QPoint pointFromIndex(int index);
 
 private:
@@ -81,6 +81,7 @@ private:
     std::size_t goalIndex, startIndex;
     int goalX, goalY;
     bool targetFound = false;
+    node goal;
     std::size_t* pOutBuffer;
 
 };
