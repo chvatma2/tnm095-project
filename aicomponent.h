@@ -7,6 +7,7 @@
 #include "agentcomponent.h"
 #include "btroot.h"
 #include "btnode.h"
+#include "btaction.h"
 
 class AIComponent : public Component
 {
@@ -20,7 +21,7 @@ private:
 
     AgentComponent *m_agentComponent = nullptr;
     BTRoot *m_treeRoot = nullptr;
-    BTNode *m_currentNode = nullptr;
+    BTAction *m_currentAction = nullptr;
 };
 
 #endif // AICOMPONENT_H

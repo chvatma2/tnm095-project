@@ -7,9 +7,9 @@ class BTRoot : public BTNode
 {
 public:
     BTRoot(BTNode* parent = nullptr);
-    virtual ~BTRoot();
     void setChild(BTNode* child);
-    void tick() override;
+    void execute() override;
+    void childFinished(bool success) override;
 
 private:
     BTNode *m_child = nullptr;

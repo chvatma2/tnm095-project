@@ -6,21 +6,19 @@ BTRoot::BTRoot(BTNode *parent)
 
 }
 
-BTRoot::~BTRoot()
-{
-
-}
-
 void BTRoot::setChild(BTNode *child)
 {
     m_child = child;
 }
 
-void BTRoot::tick()
+void BTRoot::execute()
 {
-    //If not running, do initialization
+    qDebug() << "ROOT";
+    if(m_child != nullptr)
+        m_child->execute();
+}
 
-    //Update
-
-    //If not running, do exit
+void BTRoot::childFinished(bool success)
+{
+    m_child->execute();
 }

@@ -5,8 +5,10 @@
 #-------------------------------------------------
 
 QT       += core gui opengl
-LIBS += -lOpenGL32
 
+win64:LIBS += -lOpenGL32
+
+win32:LIBS += -lOpenGL32
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = tnm095-project
@@ -47,7 +49,8 @@ SOURCES += \
     agentcomponent.cpp \
     spritecomponent.cpp \
     rendercomponent.cpp \
-    aicomponent.cpp
+    aicomponent.cpp \
+    btactionidle.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -69,4 +72,5 @@ HEADERS += \
     agentcomponent.h \
     spritecomponent.h \
     rendercomponent.h \
-    aicomponent.h
+    aicomponent.h \
+    btactionidle.h
