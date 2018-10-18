@@ -7,7 +7,7 @@ class BTNode
 public:
     BTNode(BTNode* parent = nullptr);
     BTNode* parent() const;
-    virtual execute() = 0;
+    //virtual void execute() = 0;
 
 private:
     BTNode* m_parent;

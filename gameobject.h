@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QString>
 #include <QVariant>
+#include <QOpenGLShaderProgram>
 
 #include "component.h"
 
@@ -11,14 +12,14 @@ class GameObject
 {
 public:
     GameObject();
-    QVariant getVariable(const QString& variableName);
-    void addVariable(const QString& variableName, const QVariant &value);
-    void setVariables(QMap<QString, QVariant> variables);
-
+    void update();
+    void render(QOpenGLShaderProgram *program);
+    void init();
+    void setComponent(ComponentType type, Component* component);
+    Component* component(ComponentType type);
 
 private:
     QMap<ComponentType, Component*> m_components;
-    QMap<QString, QVariant> m_variables;
 };
 
 #endif // GAMEOBJECT_H

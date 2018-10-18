@@ -14,7 +14,7 @@ AIFileLoader::AIFileLoader()
 void AIFileLoader::loadAIFiles()
 {
     QDir characterDir("./ai/characters");
-    qDebug() << characterDir.absolutePath();
+    //qDebug() << characterDir.absolutePath();
     QDirIterator characterDirIterator(characterDir.absolutePath(), QDir::NoDotAndDotDot | QDir::AllEntries);
     while (characterDirIterator.hasNext())
     {

@@ -1,23 +1,69 @@
 #include "mainwindow.h"
 
+#include <QDebug>
+
 #include "aifileloader.h"
+#include "agentcomponent.h"
+#include "spritecomponent.h"
+#include "positioncomponent.h"
+#include "rendercomponent.h"
+#include "aicomponent.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    resize(1024, 768);
+    resize(1200, 1000);
     initializeSubsystems();
     initializeUI();
+    m_time.start();
+    m_updateThread = new QThread;
+
+    m_logic = new GameLogic(&m_entities);
+    m_logic->moveToThread(m_updateThread);
+    QTimer *timer = new QTimer;
+    timer->moveToThread(m_updateThread);
+    m_logic->setTimer(timer);
+    connect(m_updateThread, &QThread::started, m_logic, &GameLogic::start);
+    m_updateThread->start();
 }
 
 MainWindow::~MainWindow()
 {
+    m_updateThread->quit();
+    m_updateThread->wait();
 
+    delete m_updateThread;
+    delete m_logic;
+}
+
+void MainWindow::render(QOpenGLShaderProgram *program)
+{
+    int width = m_openGLWidget->width();
+    int height = m_openGLWidget->height();
+
+    int mapWidth = m_gameMap->width();
+    int mapHeight = m_gameMap->height();
+
+    int tileSizeX = width / mapWidth;
+    int tileSizeY = height / mapHeight;
+    m_gameMap->renderTiles(program);
+    for(auto entity : m_entities)
+        entity->render(program);
+}
+
+void MainWindow::init()
+{
+    m_gameMap->init();
+    for(auto entity : m_entities)
+    {
+        entity->init();
+    }
 }
 
 void MainWindow::initializeSubsystems()
 {
     loadCharacters();
+    initializeGameWorld();
 }
 
 void MainWindow::loadCharacters()
@@ -28,15 +74,37 @@ void MainWindow::loadCharacters()
    for (auto characterDocument : characterDocuments)
    {
         GameObject* character = new GameObject;
-        character->setVariables(characterDocument.toVariantMap());
+        AgentData data;
+        auto characterMap = characterDocument.toVariantMap();
+        data.health = characterMap["health"].toFloat();
+        data.name = characterMap["name"].toString();
+        data.hunger = characterMap["hunger"].toFloat();
+        data.laziness = characterMap["laziness"].toInt();
+        data.speed = characterMap["speed"].toFloat();
+        AgentComponent *agentComp = new AgentComponent(data);
+        character->setComponent(ComponentType::AgentComponent, agentComp);
+        SpriteComponent *spriteComp = new SpriteComponent(32, 32, new QImage("textures/townfolk.png"));
+        PositionComponent *posComp = new PositionComponent(QPointF(8.0f, 8.0f));
+        character->setComponent(ComponentType::SpriteComponent, spriteComp);
+        character->setComponent(ComponentType::PositionComponent, posComp);
+        character->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
+        character->setComponent(ComponentType::AIComponent, new AIComponent(agentComp));
         m_entities.push_back(character);
         m_characters.push_back(character);
+        break;
    }
 }
 
 void MainWindow::initializeOpenGLWidget()
 {
     m_openGLWidget = new OpenGLWidget(this);
+    connect(m_openGLWidget, &OpenGLWidget::render, this, &MainWindow::render, Qt::DirectConnection);
+    connect(m_openGLWidget, &OpenGLWidget::init, this, &MainWindow::init, Qt::DirectConnection);
+}
+
+void MainWindow::initializeGameWorld()
+{
+    m_gameMap = new Map(16, 16);
 }
 
 void MainWindow::initializeUI()
@@ -51,4 +119,35 @@ void MainWindow::initializeUI()
     m_centralLayout->addWidget(m_openGLWidget);
     m_centralWidget->setLayout(m_centralLayout);
     setCentralWidget(m_centralWidget);
+}
+
+GameLogic::GameLogic(QVector<GameObject *> *entities)
+    : QObject (), m_entities(entities)
+{
+}
+
+GameLogic::~GameLogic()
+{
+
+}
+
+void GameLogic::setTimer(QTimer *updateTimer)
+{
+    m_updateTimer = updateTimer;
+}
+
+void GameLogic::start()
+{
+    connect(m_updateTimer, &QTimer::timeout, this, &GameLogic::update);
+    m_updateTimer->setTimerType(Qt::PreciseTimer);
+    m_updateTimer->start(16);
+    m_time.start();
+}
+
+void GameLogic::update()
+{
+    for(auto entity : *m_entities)
+    {
+        entity->update();
+    }
 }

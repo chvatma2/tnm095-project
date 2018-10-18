@@ -1,4 +1,5 @@
 #include "characterlistwidget.h"
+#include "agentcomponent.h"
 
 CharacterListWidget::CharacterListWidget(QVector<GameObject *> &characters, QWidget *parent) : QWidget(parent)
 {
@@ -13,9 +14,10 @@ CharacterListWidget::CharacterListWidget(QVector<GameObject *> &characters, QWid
     {
         //TODO
         CharacterWidget* newWidget = new CharacterWidget(character);
-        newWidget->setName(character->getVariable("name").toString());
-        newWidget->healthChange(character->getVariable("health").toInt());
-        newWidget->setLaziness(character->getVariable("laziness").toInt());
+        AgentData data = (dynamic_cast<AgentComponent*>(character->component(ComponentType::AgentComponent)))->data();
+        newWidget->setName(data.name);
+        newWidget->healthChange(data.health);
+        newWidget->setLaziness(data.laziness);
         m_characterList.push_back(newWidget);
         m_listLayout->addWidget(newWidget);
     }

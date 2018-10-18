@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = tnm095-project
 TEMPLATE = app
 
+CONFIG += c++1z
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -38,7 +40,13 @@ SOURCES += \
     btselector.cpp \
     btsequence.cpp \
     btcondition.cpp \
-    btaction.cpp
+    btaction.cpp \
+    map.cpp \
+    positioncomponent.cpp \
+    agentcomponent.cpp \
+    spritecomponent.cpp \
+    rendercomponent.cpp \
+    aicomponent.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -54,4 +62,10 @@ HEADERS += \
     btselector.h \
     btsequence.h \
     btcondition.h \
-    btaction.h
+    btaction.h \
+    map.h \
+    positioncomponent.h \
+    agentcomponent.h \
+    spritecomponent.h \
+    rendercomponent.h \
+    aicomponent.h

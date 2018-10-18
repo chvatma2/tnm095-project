@@ -1,5 +1,7 @@
 { 
 "name":"Steve", 
 "health":15,
-"laziness":3
+"laziness":3,
+"hunger":0,
+"speed":1.0
 } 

@@ -1,23 +1,48 @@
 #include "gameobject.h"
 
+#include "rendercomponent.h"
+#include "aicomponent.h"
+
 GameObject::GameObject()
 {
 
 }
 
-QVariant GameObject::getVariable(const QString &variableName)
+void GameObject::update()
 {
-    if(!m_variables.contains(variableName))
-        return QVariant();
-   return m_variables[variableName];
+    if(!m_components.contains(ComponentType::AIComponent))
+        return;
+    if(!m_components.contains(ComponentType::PositionComponent))
+        return;
+    auto posComp = dynamic_cast<PositionComponent*>(m_components[ComponentType::PositionComponent]);
+    dynamic_cast<AIComponent*>(m_components[ComponentType::AIComponent])->update(posComp);
 }
 
-void GameObject::addVariable(const QString &variableName, const QVariant &value)
+void GameObject::render(QOpenGLShaderProgram *program)
 {
-    m_variables[variableName] = value;
+    if(!m_components.contains(ComponentType::RenderComponent))
+        return;
+    dynamic_cast<RenderComponent*>(m_components[ComponentType::RenderComponent])->render(program);
 }
 
-void GameObject::setVariables(QMap<QString, QVariant> variables)
+void GameObject::init()
 {
-    m_variables = variables;
+    if(!m_components.contains(ComponentType::RenderComponent))
+        return;
+    dynamic_cast<RenderComponent*>(m_components[ComponentType::RenderComponent])->init();
+}
+
+void GameObject::setComponent(ComponentType type, Component *component)
+{
+    if(m_components.contains(type))
+        delete m_components[type];
+    m_components[type] = component;
+}
+
+Component *GameObject::component(ComponentType type)
+{
+    auto component = m_components.find(type);
+    if(component == m_components.end())
+        return nullptr;
+    return component.value();
 }

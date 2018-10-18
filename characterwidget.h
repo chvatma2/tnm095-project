@@ -16,6 +16,7 @@ class CharacterWidget : public QWidget
     Q_OBJECT
 public:
     explicit CharacterWidget(GameObject* character, QWidget *parent = nullptr);
+    void update();
     int health();
     QString name();
 

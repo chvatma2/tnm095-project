@@ -23,6 +23,12 @@ CharacterWidget::CharacterWidget(GameObject *character, QWidget *parent) : QWidg
     m_mainLayout->addLayout(lazinessLayout);
     m_mainLayout->addWidget(m_exportButton);
     setLayout(m_mainLayout);
+    update();
+}
+
+void CharacterWidget::update()
+{
+
 }
 
 int CharacterWidget::health()
