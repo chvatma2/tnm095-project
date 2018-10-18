@@ -73,6 +73,22 @@ void Map::init()
     }
 }
 
+QList<QPoint> Map::pathToClosestWood(QPointF from)
+{
+    std::size_t buffer[500];
+
+}
+
+QList<QPoint> Map::pathToClosestHouse(QPointF from)
+{
+    
+}
+
+QList<QPoint> Map::pathToClosestDiner(QPointF from)
+{
+    
+}
+
 float Map::traversalCostOfTile(int x, int y)
 {
     float cost = m_tileTypeTraversalCost[m_terrain[x][y]];
@@ -201,6 +217,17 @@ void Map::createTiles()
             m_tiles.insert(QPoint(x,y), tile);
         }
     }
+}
+
+QList<QPoint> Map::rawBufferToPath(std::size_t *buffer, int length)
+{
+    QList<QPoint> result;
+    for(int i = 0; i < length; ++i)
+    {
+        result.push_back( pointFromIndex(buffer[i]));
+    }
+
+    return result;
 }
 
 void Map::investigate(node n)
