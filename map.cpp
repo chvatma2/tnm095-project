@@ -73,6 +73,76 @@ void Map::init()
     }
 }
 
+float Map::traversalCostOfTile(int x, int y)
+{
+    float cost = m_tileTypeTraversalCost[m_terrain[x][y]];
+    if(m_buildings.contains(QPoint(x, y)))
+        return -1.0f;
+    if(m_resources.contains(QPoint(x, y)))
+        cost *= 1.5f;
+
+    return cost;
+}
+
+int Map::findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer)
+{
+    std::size_t mapwidth = static_cast<std::size_t>(width());
+    std::size_t mapheight = static_cast<std::size_t>(height());
+    hCosts.assign(mapwidth*mapheight, -1);
+    parents.assign(mapwidth*mapheight, static_cast<std::size_t>(-1));
+
+    std::priority_queue<node> p;
+    prioQueue = p;
+
+    goalIndex = getIndex(goalX, goalY);
+    this->goalX = goalX;
+    this->goalY = goalY;
+
+    node startingNode;
+    startIndex = getIndex(startX, startY);
+    startingNode.x = startX;
+    startingNode.y = startY;
+    startingNode.index = startIndex;
+    startingNode.fCost = 0;
+    startingNode.hCost = 0;
+    startingNode.parent = static_cast<std::size_t>(-1);
+
+    prioQueue.push(startingNode);
+    targetFound = false;
+
+    this->pOutBuffer = pOutBuffer;
+
+    while (!prioQueue.empty() && !targetFound)
+        {
+            node n = prioQueue.top();
+            prioQueue.pop();
+            investigate(n);
+        }
+
+        if (hCosts[goalIndex] != -1)
+        {
+            findShortestPath(hCosts[goalIndex], pOutBuffer);
+            return hCosts[goalIndex];
+        }
+        else
+        {
+            return -1;
+        }
+}
+
+void Map::findShortestPath(int dist, std::size_t *outBuffer)
+{
+    int i = 1;
+    std::size_t index = goalIndex;
+
+    while (index != startIndex)
+    {
+       *(outBuffer + dist - i) = index;
+       index = parents[index];
+       ++i;
+    }
+}
+
 void Map::loadMapFromFile()
 {
     //Terrain
@@ -123,5 +193,78 @@ void Map::createTiles()
                                                                                    dynamic_cast<PositionComponent*>(tile->component(ComponentType::PositionComponent))));
             m_tiles.insert(QPoint(x,y), tile);
         }
+    }
+}
+
+void Map::investigate(node n)
+{
+    // check if the node is the target
+       if (n.index == goalIndex)
+       {
+           targetFound = true;
+           hCosts[n.index] = n.hCost;
+           parents[n.index] = n.parent;
+           return;
+       }
+
+       // check wether the node was already visited
+       if (hCosts[n.index] != -1)
+       {
+           return;
+       }
+
+       // if this is the shortest path from the source to this node:
+       int x = n.x;
+       int y = n.y;
+
+       // set parent and hCost
+       hCosts[n.index] = n.hCost;
+       parents[n.index] = n.parent;
+
+       // visit node on the left
+       if (0 <= x - 1)
+       {
+           visitNode(x - 1, y, n);
+       }
+       // visit node on the right
+       if (x + 1 < width())
+       {
+           visitNode(x + 1, y, n);
+       }
+       // visit node below
+       if (0 <= y - 1)
+       {
+           visitNode(x, y - 1, n);
+       }
+       //visit node above
+       if (y + 1 < height())
+       {
+           visitNode(x, y + 1, n);
+       }
+}
+
+int Map::getDistance(int x, int y) const
+{
+    return std::max(x - goalX, goalX - x) + std::max(y - goalY, goalY - y); //Manhattan distance
+}
+
+std::size_t Map::getIndex(int x, int y) const
+{
+    return static_cast<std::size_t>(y * width() + x);
+}
+
+void Map::visitNode(int x, int y, node n)
+{
+    std::size_t newId = getIndex(x, y);
+    if (hCosts[newId] == -1 && traversalCostOfTile(x, y) > 0)
+    {
+        node newNode;
+        newNode.x = x;
+        newNode.y = y;
+        newNode.index = newId;
+        newNode.parent = n.index;
+        newNode.hCost = n.hCost + 1;
+        newNode.fCost = (n.hCost + 1) + getDistance(x, y) + traversalCostOfTile(x, y); //TODO: change traversal cost to int??
+        prioQueue.push(newNode);
     }
 }
