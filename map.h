@@ -51,11 +51,9 @@ public:
 
     //A*
     int findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOutBuffer); //Returns total distance from start to goal
-
+    QPoint pointFromIndex(int index);
 
 private:
-
-
     void loadMapFromFile();
     void loadTextures();
     void createTiles();

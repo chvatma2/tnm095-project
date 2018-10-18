@@ -130,6 +130,13 @@ int Map::findPath(int startX, int startY, int goalX, int goalY, std::size_t* pOu
         }
 }
 
+QPoint Map::pointFromIndex(int index)
+{
+    int x = index % width();
+    int y = static_cast<int>(std::floor(index / width()));
+    return QPoint(x, y);
+}
+
 void Map::findShortestPath(int dist, std::size_t *outBuffer)
 {
     int i = 1;
@@ -246,6 +253,13 @@ void Map::investigate(node n)
 int Map::getDistance(int x, int y) const
 {
     return std::max(x - goalX, goalX - x) + std::max(y - goalY, goalY - y); //Manhattan distance
+
+    /*
+    int dx = abs(node.x - goal.x)
+    int dy = abs(node.y - goal.y)
+    return
+
+    */
 }
 
 std::size_t Map::getIndex(int x, int y) const
