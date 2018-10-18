@@ -14,8 +14,7 @@ void GameObject::update()
         return;
     if(!m_components.contains(ComponentType::PositionComponent))
         return;
-    auto posComp = dynamic_cast<PositionComponent*>(m_components[ComponentType::PositionComponent]);
-    dynamic_cast<AIComponent*>(m_components[ComponentType::AIComponent])->update(posComp);
+    dynamic_cast<AIComponent*>(m_components[ComponentType::AIComponent])->update();
 }
 
 void GameObject::render(QOpenGLShaderProgram *program)

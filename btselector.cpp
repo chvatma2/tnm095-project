@@ -18,6 +18,7 @@ void BTSelector::childFinished(bool success)
 {
     if(success)
     {
+        m_currentlyRunningChild = -1;
         m_parent->childFinished(true);
     }
     else

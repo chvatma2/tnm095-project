@@ -8,6 +8,7 @@
 #include "positioncomponent.h"
 #include "rendercomponent.h"
 #include "aicomponent.h"
+#include "amountcomponent.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -80,7 +81,7 @@ void MainWindow::loadCharacters()
         character->setComponent(ComponentType::SpriteComponent, spriteComp);
         character->setComponent(ComponentType::PositionComponent, posComp);
         character->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
-        character->setComponent(ComponentType::AIComponent, new AIComponent(agentComp));
+        character->setComponent(ComponentType::AIComponent, new AIComponent(posComp, m_gameMap, agentComp));
         m_entities.push_back(character);
         m_characters.push_back(character);
         break;
@@ -103,9 +104,11 @@ void MainWindow::initializeGameWorld()
         GameObject* tree = new GameObject;
         SpriteComponent *spriteComp = new SpriteComponent(50, 50, new QImage("textures/tree.png"));
         PositionComponent *posComp = new PositionComponent(QPointF(i, i%2));
+        tree->setComponent(ComponentType::AmountComponent, new AmountComponent(100.0f));
         tree->setComponent(ComponentType::SpriteComponent, spriteComp);
         tree->setComponent(ComponentType::PositionComponent, posComp);
         tree->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
+        m_gameMap->addResource(QPoint(i, i%2), tree);
 
         m_entities.push_back(tree);
     }

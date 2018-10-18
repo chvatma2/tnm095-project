@@ -11,7 +11,7 @@ public:
     void childFinished(bool success) override;
     virtual void tick() = 0;
 
-private:
+protected:
     BTAction **m_componentReportLoopback;
 };
 
