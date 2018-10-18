@@ -10,11 +10,15 @@
 
 #include <QOpenGLShaderProgram>
 
+#include <queue>
+
 
 enum class TileType
 {
     GRASS
 };
+
+
 
 inline uint qHash (const QPoint & key)
 {
@@ -32,11 +36,22 @@ public:
     int width() const;
     void renderTiles(QOpenGLShaderProgram *program);
     void init();
+    void findShortestPath(int dist, int* outBuffer, const int outBufferSize);
 
 private:
+    struct node
+    {
+        int index;
+        int fCost;
+        int hCost;
+        int parent;
+    };
+
     void loadMapFromFile();
     void loadTextures();
     void createTiles();
+    void investigate(node n);
+    int getDistance(int x, int y) const;
 
     QVector<QVector<TileType>> m_terrain;
     QHash<QPoint, GameObject*> m_tiles;
@@ -44,6 +59,17 @@ private:
     QHash<QPoint, GameObject*> m_buildings;
     QMap<QString, TileType> m_tileMapping{{"G", TileType::GRASS}};
     QMap<TileType, QImage*> m_terrainImages;
+
+    //A*
+    std::vector<int> hCosts;
+    std::vector<int> parents;
+    std::priority_queue<node> prioQueue;
+    int goalIndex, startIndex;
+    int goalX, goalY;
+    bool targetFound = false;
+    int* pOutBuffer;
+    int nOutBufferSize;
+
 };
 
 #endif // MAP_H
