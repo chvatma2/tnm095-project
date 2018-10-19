@@ -13,7 +13,6 @@ void BTSequence::addChild(BTNode *child)
 
 void BTSequence::execute()
 {
-    qDebug() << "SEQUENCE";
     m_currentlyRunningChild = 0;
     if(m_currentlyRunningChild < m_children.size())
         m_children.at(0)->execute();

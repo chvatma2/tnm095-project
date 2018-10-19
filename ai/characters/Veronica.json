@@ -1,0 +1,8 @@
+{ 
+"name":"Veronica", 
+"health":30,
+"laziness":5,
+"hunger":10,
+"speed":0.8,
+"texture":"textures/ranger.png"
+} 

@@ -7,6 +7,7 @@
 #include "spritecomponent.h"
 #include "positioncomponent.h"
 #include "rendercomponent.h"
+#include "amountcomponent.h"
 
 Map::Map(int width, int height)
 {
@@ -73,6 +74,21 @@ void Map::init()
     }
 }
 
+void Map::changeResourceAmount(QPoint position, float delta)
+{
+    auto resource = m_resources.find(position);
+    if(resource == m_resources.end())
+        return;
+
+    auto amountComp = dynamic_cast<AmountComponent*>(resource.value()->component(ComponentType::AmountComponent));
+    amountComp->changeAmount(delta);
+    if(amountComp->amount() < 0.0f)
+    {
+        resource.value()->deleteComponent(ComponentType::RenderComponent);
+        m_resources.erase(resource);
+    }
+}
+
 QList<QPoint> Map::pathToClosestWood(QPointF from)
 {
     std::size_t bestBuffer[500];
@@ -97,7 +113,14 @@ QList<QPoint> Map::pathToClosestWood(QPointF from)
     if(bestCost == 100000000.0f)
         return QList<QPoint>();
     else
+    {
+        if(bestLength == 0)
+        {
+            QList<QPoint> onePoint = {QPoint(static_cast<int>(from.x()), static_cast<int>(from.y()))};
+            return onePoint;
+        }
         return rawBufferToPath(bestBuffer, bestLength);
+    }
 }
 
 QList<QPoint> Map::pathToClosestHouse(QPointF from)
@@ -152,6 +175,36 @@ QList<QPoint> Map::pathToClosestDiner(QPointF from)
         return QList<QPoint>();
     else
         return rawBufferToPath(bestBuffer, bestLength);
+}
+
+QList<QPoint> Map::pathToPoint(QPointF from, QPoint to)
+{
+    std::size_t buffer[500];
+    float cost;
+    int length = findPath(static_cast<int>(from.x()), static_cast<int>(from.y()),
+                          static_cast<int>(to.x()), static_cast<int>(to.y()),
+                          buffer, &cost);
+    if(length == -1)
+        return QList<QPoint>();
+    else
+        return rawBufferToPath(buffer, length);
+}
+
+GameObject *Map::objectOnPosition(QPoint pos)
+{
+    auto building = m_buildings.find(pos);
+    auto resource = m_resources.find(pos);
+    if(building != m_buildings.end())
+    {
+        return building.value();
+    }
+    else if(resource != m_resources.end())
+    {
+        return resource.value();
+    }
+    else
+        return nullptr;
+
 }
 
 float Map::traversalCostOfTile(int x, int y)

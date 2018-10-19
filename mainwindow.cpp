@@ -42,6 +42,7 @@ void MainWindow::render(QOpenGLShaderProgram *program)
     m_gameMap->renderTiles(program);
     for(auto entity : m_entities)
         entity->render(program);
+    m_characterListWidget->updateCharacterWidgets();
 }
 
 void MainWindow::init()
@@ -76,7 +77,7 @@ void MainWindow::loadCharacters()
         data.speed = characterMap["speed"].toFloat();
         AgentComponent *agentComp = new AgentComponent(data);
         character->setComponent(ComponentType::AgentComponent, agentComp);
-        SpriteComponent *spriteComp = new SpriteComponent(32, 32, new QImage("textures/townfolk.png"));
+        SpriteComponent *spriteComp = new SpriteComponent(32, 32, new QImage(characterMap["texture"].toString()));
         PositionComponent *posComp = new PositionComponent(QPointF(8.0f, 8.0f));
         character->setComponent(ComponentType::SpriteComponent, spriteComp);
         character->setComponent(ComponentType::PositionComponent, posComp);
@@ -84,7 +85,6 @@ void MainWindow::loadCharacters()
         character->setComponent(ComponentType::AIComponent, new AIComponent(posComp, m_gameMap, agentComp));
         m_entities.push_back(character);
         m_characters.push_back(character);
-        break;
    }
 }
 
@@ -99,19 +99,30 @@ void MainWindow::initializeGameWorld()
 {
     m_gameMap = new Map(16, 16);
 
-    for(int i = 0; i < 13; ++i)
+    for(int i = 0; i < 30; ++i)
     {
         GameObject* tree = new GameObject;
         SpriteComponent *spriteComp = new SpriteComponent(50, 50, new QImage("textures/tree.png"));
-        PositionComponent *posComp = new PositionComponent(QPointF(i, i%2));
+        PositionComponent *posComp = new PositionComponent(QPointF((i * 5) % 13, i%15));
         tree->setComponent(ComponentType::AmountComponent, new AmountComponent(100.0f));
         tree->setComponent(ComponentType::SpriteComponent, spriteComp);
         tree->setComponent(ComponentType::PositionComponent, posComp);
         tree->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
-        m_gameMap->addResource(QPoint(i, i%2), tree);
+        m_gameMap->addResource(QPoint((i * 5) % 13, i%15), tree);
 
         m_entities.push_back(tree);
     }
+
+    GameObject* tree = new GameObject;
+    SpriteComponent *spriteComp2 = new SpriteComponent(50, 50, new QImage("textures/tree.png"));
+    PositionComponent *posComp2 = new PositionComponent(QPointF(4.0, 10.0));
+    tree->setComponent(ComponentType::AmountComponent, new AmountComponent(100.0f));
+    tree->setComponent(ComponentType::SpriteComponent, spriteComp2);
+    tree->setComponent(ComponentType::PositionComponent, posComp2);
+    tree->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp2, posComp2));
+    m_gameMap->addResource(QPoint(4.0, 10.0), tree);
+
+    m_entities.push_back(tree);
 
     GameObject* tavern = new GameObject;
     SpriteComponent *spriteComp = new SpriteComponent(100, 100, new QImage("textures/tavern.png"));

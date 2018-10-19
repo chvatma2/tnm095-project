@@ -38,6 +38,11 @@ void GameObject::setComponent(ComponentType type, Component *component)
     m_components[type] = component;
 }
 
+void GameObject::deleteComponent(ComponentType type)
+{
+    m_components.remove(type);
+}
+
 Component *GameObject::component(ComponentType type)
 {
     auto component = m_components.find(type);

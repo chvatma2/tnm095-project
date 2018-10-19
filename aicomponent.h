@@ -22,6 +22,7 @@ private:
     BTNode* createWoodCuttingTree(BTNode* parent);
     BTNode* createRestingTree(BTNode* parent);
     BTNode* createEatingTree(BTNode* parent);
+    BTNode* createLazyTree(BTNode* parent);
 
     PositionComponent *m_positionComponent = nullptr;
     AgentComponent *m_agentComponent = nullptr;

@@ -1,5 +1,7 @@
 #include "characterwidget.h"
 
+#include "agentcomponent.h"
+
 #include <QPalette>
 
 CharacterWidget::CharacterWidget(GameObject *character, QWidget *parent) : QWidget(parent)
@@ -11,24 +13,51 @@ CharacterWidget::CharacterWidget(GameObject *character, QWidget *parent) : QWidg
     m_lazinessSlider = new QSlider(Qt::Horizontal);
     m_lazinessSlider->setMinimum(0);
     m_lazinessSlider->setMaximum(10);
-    m_exportButton = new QPushButton("Export");
     m_healthBar->setMinimum(0);
     m_healthBar->setMaximum(100);
     m_mainLayout->addWidget(m_nameLabel);
 
-    m_mainLayout->addWidget(m_healthBar);
+
+    m_hungerBar = new QProgressBar;
+    m_hungerBar->setMinimum(0);
+    m_hungerBar->setMaximum(100);
+
+    QHBoxLayout *healthBarLayout = new QHBoxLayout;
+    healthBarLayout->addWidget(new QLabel("   HP"));
+    healthBarLayout->addWidget(m_healthBar);
+    m_mainLayout->addLayout(healthBarLayout);
+
+    QHBoxLayout *hungerBarLayout = new QHBoxLayout;
+    hungerBarLayout->addWidget(new QLabel("Hunger"));
+    hungerBarLayout->addWidget(m_hungerBar);
+    m_mainLayout->addLayout(hungerBarLayout);
+
+    QHBoxLayout *harvestedLayout = new QHBoxLayout;
+    harvestedLayout->addWidget(new QLabel("Harvested: "));
+    m_harvestedWood = new QLabel;
+    harvestedLayout->addWidget(m_harvestedWood);
+    m_mainLayout->addLayout(harvestedLayout);
+
     QHBoxLayout* lazinessLayout = new QHBoxLayout;
     lazinessLayout->addWidget(new QLabel("Laziness"));
     lazinessLayout->addWidget(m_lazinessSlider);
     m_mainLayout->addLayout(lazinessLayout);
-    m_mainLayout->addWidget(m_exportButton);
     setLayout(m_mainLayout);
-    update();
+    updateCharacterWidget();
+
+    connect(m_lazinessSlider, &QSlider::valueChanged, this, &CharacterWidget::setLaziness);
 }
 
-void CharacterWidget::update()
+void CharacterWidget::updateCharacterWidget()
 {
+    AgentComponent *agentComponent = dynamic_cast<AgentComponent*>(m_character->component(ComponentType::AgentComponent));
+    healthChange(agentComponent->data().health);
 
+    hungerChange(agentComponent->data().hunger);
+
+    setLaziness(agentComponent->data().laziness);
+
+    m_harvestedWood->setText(QString::number(agentComponent->data().harvestedWood));
 }
 
 int CharacterWidget::health()
@@ -47,6 +76,12 @@ void CharacterWidget::healthChange(int health)
     m_healthBar->setValue(health);
 }
 
+void CharacterWidget::hungerChange(int hunger)
+{
+    m_hunger = hunger;
+    m_hungerBar->setValue(hunger);
+}
+
 void CharacterWidget::setName(const QString &name)
 {
     m_name = name;
@@ -56,4 +91,7 @@ void CharacterWidget::setName(const QString &name)
 void CharacterWidget::setLaziness(int laziness)
 {
     m_lazinessSlider->setValue(laziness);
+    AgentComponent *agentComponent = dynamic_cast<AgentComponent*>(m_character->component(ComponentType::AgentComponent));
+    agentComponent->data().laziness = laziness;
+
 }

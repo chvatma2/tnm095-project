@@ -16,6 +16,7 @@ public:
     void render(QOpenGLShaderProgram *program);
     void init();
     void setComponent(ComponentType type, Component* component);
+    void deleteComponent(ComponentType type);
     Component* component(ComponentType type);
 
 private:

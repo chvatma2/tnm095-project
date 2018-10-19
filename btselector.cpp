@@ -8,7 +8,6 @@ BTSelector::BTSelector(BTNode *parent)
 
 void BTSelector::execute()
 {
-    qDebug() << "SELECTOR";
     m_currentlyRunningChild = 0;
     if(m_currentlyRunningChild < m_children.size())
         m_children.at(0)->execute();

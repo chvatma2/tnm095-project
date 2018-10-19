@@ -52,7 +52,11 @@ SOURCES += \
     aicomponent.cpp \
     btactionidle.cpp \
     amountcomponent.cpp \
-    btrestingaction.cpp
+    btrestingaction.cpp \
+    btsetdata.cpp \
+    btseekingfoodaction.cpp \
+    btseektreeaction.cpp \
+    btwalkrandom.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -77,4 +81,8 @@ HEADERS += \
     aicomponent.h \
     btactionidle.h \
     amountcomponent.h \
-    btrestingaction.h
+    btrestingaction.h \
+    btsetdata.h \
+    btseekingfoodaction.h \
+    btseektreeaction.h \
+    btwalkrandom.h

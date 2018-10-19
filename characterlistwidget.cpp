@@ -24,3 +24,11 @@ CharacterListWidget::CharacterListWidget(QVector<GameObject *> &characters, QWid
     m_listLayout->addStretch();
     m_scrollArea->setWidget(m_widgetList);
 }
+
+void CharacterListWidget::updateCharacterWidgets()
+{
+    for(auto widget : m_characterList)
+    {
+        widget->updateCharacterWidget();
+    }
+}

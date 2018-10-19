@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    void updateCharacterWidgets();
 
 private:
     //QMap<int, GameObject*> m_characters;

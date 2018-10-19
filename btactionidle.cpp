@@ -10,7 +10,6 @@ BTActionIdle::BTActionIdle(float idleTimeSec, BTAction **loopback, BTNode *paren
 
 void BTActionIdle::tick()
 {
-    qDebug() << "IDLE";
     if(!m_running)
     {
         m_timer.restart();

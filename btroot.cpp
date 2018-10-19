@@ -13,7 +13,6 @@ void BTRoot::setChild(BTNode *child)
 
 void BTRoot::execute()
 {
-    qDebug() << "ROOT";
     if(m_child != nullptr)
         m_child->execute();
 }

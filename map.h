@@ -49,9 +49,12 @@ public:
     int width() const;
     void renderTiles(QOpenGLShaderProgram *program);
     void init();
+    void changeResourceAmount(QPoint position, float delta);
     QList<QPoint> pathToClosestWood(QPointF from);
     QList<QPoint> pathToClosestHouse(QPointF from);
     QList<QPoint> pathToClosestDiner(QPointF from);
+    QList<QPoint> pathToPoint(QPointF from, QPoint to);
+    GameObject* objectOnPosition(QPoint pos);
 
 
     //A*

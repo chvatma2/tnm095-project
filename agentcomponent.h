@@ -12,6 +12,7 @@ struct AgentData
     int laziness = 0;
     float speed = 1.0f;
     QString name;
+    float harvestedWood = 0.0f;
 };
 
 class AgentComponent : public Component

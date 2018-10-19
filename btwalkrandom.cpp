@@ -1,18 +1,29 @@
-#include "btrestingaction.h"
+#include "btwalkrandom.h"
 
-#include <QVector2D>
+#include <QRandomGenerator>
 
-BTRestingAction::BTRestingAction(AgentComponent *agentComponent, PositionComponent *pos, Map *gameMap, BTAction **componentReportLoopback, BTNode *parent)
+BTWalkRandom::BTWalkRandom(AgentComponent *agentComponent, PositionComponent *pos, Map *gameMap, BTAction **componentReportLoopback, BTNode *parent)
     : BTAction (componentReportLoopback, parent), m_agentComponent(agentComponent), m_positionComponent(pos), m_gameMap(gameMap)
 {
 
 }
 
-void BTRestingAction::tick()
+void BTWalkRandom::tick()
 {
     if(!m_running)
     {
-        m_path = m_gameMap->pathToClosestHouse(m_positionComponent->position());
+        QPoint randomPos(static_cast<int>(m_positionComponent->position().x() + QRandomGenerator::global()->generateDouble() * 6 - 3),
+                         static_cast<int>(m_positionComponent->position().y() + QRandomGenerator::global()->generateDouble() * 6 - 3));
+        if(randomPos.x() < 0)
+            randomPos.setX(3);
+        if(randomPos.y() < 0)
+            randomPos.setY(3);
+        if(randomPos.x() >= m_gameMap->width())
+            randomPos.setX(m_gameMap->width() - 3);
+        if(randomPos.y() >= m_gameMap->height())
+            randomPos.setY(m_gameMap->height() - 3);
+
+        m_path = m_gameMap->pathToPoint(m_positionComponent->position(), randomPos);
         if(m_path.empty())
         {
             m_parent->childFinished(false);
