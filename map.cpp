@@ -32,7 +32,7 @@ bool Map::addBuilding(const QPoint &position, GameObject *building)
 
     if(!isPositionEmpty(position))
         return false;
-    m_resources.insert(position, building);
+    m_buildings.insert(position, building);
     return true;
 }
 
@@ -75,25 +75,90 @@ void Map::init()
 
 QList<QPoint> Map::pathToClosestWood(QPointF from)
 {
-    std::size_t buffer[500];
-
+    std::size_t bestBuffer[500];
+    float bestCost = 100000000.0f;
+    int bestLength = 0;
+    for(auto tree : m_resources)
+    {
+        std::size_t buffer[500];
+        float cost;
+        PositionComponent *posComp = dynamic_cast<PositionComponent*>(tree->component(ComponentType::PositionComponent));
+        int length = findPath(static_cast<int>(from.x()), static_cast<int>(from.y()),
+                              static_cast<int>(posComp->position().x()), static_cast<int>(posComp->position().y()),
+                              buffer, &cost);
+        if(cost < bestCost)
+        {
+            bestCost = cost;
+            bestLength = length;
+            for(int i = 0; i < length; ++i)
+                bestBuffer[i] = buffer[i];
+        }
+    }
+    if(bestCost == 100000000.0f)
+        return QList<QPoint>();
+    else
+        return rawBufferToPath(bestBuffer, bestLength);
 }
 
 QList<QPoint> Map::pathToClosestHouse(QPointF from)
 {
-    
+    std::size_t bestBuffer[500];
+    float bestCost = 100000000.0f;
+    int bestLength = 0;
+    for(auto building : m_buildings)
+    {
+        std::size_t buffer[500];
+        float cost;
+        PositionComponent *posComp = dynamic_cast<PositionComponent*>(building->component(ComponentType::PositionComponent));
+        int length = findPath(static_cast<int>(from.x()), static_cast<int>(from.y()),
+                              static_cast<int>(posComp->position().x()), static_cast<int>(posComp->position().y()),
+                              buffer, &cost);
+        if(cost < bestCost)
+        {
+            bestCost = cost;
+            bestLength = length;
+            for(int i = 0; i < length; ++i)
+                bestBuffer[i] = buffer[i];
+        }
+    }
+    if(bestCost == 100000000.0f)
+        return QList<QPoint>();
+    else
+        return rawBufferToPath(bestBuffer, bestLength);
 }
 
 QList<QPoint> Map::pathToClosestDiner(QPointF from)
 {
-    
+    std::size_t bestBuffer[500];
+    float bestCost = 100000000.0f;
+    int bestLength = 0;
+    for(auto tree : m_resources)
+    {
+        std::size_t buffer[500];
+        float cost;
+        PositionComponent *posComp = dynamic_cast<PositionComponent*>(tree->component(ComponentType::PositionComponent));
+        int length = findPath(static_cast<int>(from.x()), static_cast<int>(from.y()),
+                              static_cast<int>(posComp->position().x()), static_cast<int>(posComp->position().y()),
+                              buffer, &cost);
+        if(cost < bestCost)
+        {
+            bestCost = cost;
+            bestLength = length;
+            for(int i = 0; i < length; ++i)
+                bestBuffer[i] = buffer[i];
+        }
+    }
+    if(bestCost == 100000000.0f)
+        return QList<QPoint>();
+    else
+        return rawBufferToPath(bestBuffer, bestLength);
 }
 
 float Map::traversalCostOfTile(int x, int y)
 {
     float cost = m_tileTypeTraversalCost[m_terrain[x][y]];
     if(m_buildings.contains(QPoint(x, y)))
-        return -1.0f;
+        cost *= 1.2f;
     if(m_resources.contains(QPoint(x, y)))
         cost *= 1.5f;
 

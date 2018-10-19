@@ -19,6 +19,10 @@ public:
 
 private:
     void generateBehaviorTree();
+    BTNode* createWoodCuttingTree(BTNode* parent);
+    BTNode* createRestingTree(BTNode* parent);
+    BTNode* createEatingTree(BTNode* parent);
+
     PositionComponent *m_positionComponent = nullptr;
     AgentComponent *m_agentComponent = nullptr;
     BTRoot *m_treeRoot = nullptr;

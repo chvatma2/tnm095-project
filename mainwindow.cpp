@@ -55,8 +55,8 @@ void MainWindow::init()
 
 void MainWindow::initializeSubsystems()
 {
-    loadCharacters();
     initializeGameWorld();
+    loadCharacters();
 }
 
 void MainWindow::loadCharacters()
@@ -112,6 +112,15 @@ void MainWindow::initializeGameWorld()
 
         m_entities.push_back(tree);
     }
+
+    GameObject* tavern = new GameObject;
+    SpriteComponent *spriteComp = new SpriteComponent(100, 100, new QImage("textures/tavern.png"));
+    PositionComponent *posComp = new PositionComponent(QPointF(13.0, 13.0));
+    tavern->setComponent(ComponentType::SpriteComponent, spriteComp);
+    tavern->setComponent(ComponentType::PositionComponent, posComp);
+    tavern->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
+    m_gameMap->addBuilding(QPoint(13, 13), tavern);
+    m_entities.push_back(tavern);
 }
 
 void MainWindow::initializeUI()

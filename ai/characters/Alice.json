@@ -1,6 +1,6 @@
 { 
 "name":"Alice", 
-"health":80,
+"health":15,
 "laziness":0,
 "hunger":0,
 "speed":1.0

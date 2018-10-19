@@ -51,7 +51,8 @@ SOURCES += \
     rendercomponent.cpp \
     aicomponent.cpp \
     btactionidle.cpp \
-    amountcomponent.cpp
+    amountcomponent.cpp \
+    btrestingaction.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -75,4 +76,5 @@ HEADERS += \
     rendercomponent.h \
     aicomponent.h \
     btactionidle.h \
-    amountcomponent.h
+    amountcomponent.h \
+    btrestingaction.h
