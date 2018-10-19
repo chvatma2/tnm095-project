@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
+QT       += core gui opengl multimedia
 
 win64:LIBS += -lOpenGL32
 

@@ -45,5 +45,7 @@ void BTSeekTreeAction::tick()
         *m_componentReportLoopback = nullptr;
         m_parent->childFinished(true);
         m_targetTree = nullptr;
+
+        QSound::play("sound/axe_swing2.wav");
     }
 }

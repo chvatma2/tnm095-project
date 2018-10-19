@@ -3,6 +3,7 @@
 
 
 #include <QList>
+#include <QSound>
 #include <QPoint>
 
 #include "btaction.h"

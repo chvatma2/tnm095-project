@@ -58,7 +58,7 @@ BTNode *AIComponent::createWoodCuttingTree(BTNode *parent)
 {
     BTSequence* root = new BTSequence(parent);
     root->addChild(new BTSeekTreeAction(m_agentComponent, m_positionComponent, m_gameMap, &m_currentAction, root));
-    root->addChild(new BTActionIdle(1.0f / m_agentComponent->data().speed, &m_currentAction, root));
+    root->addChild(new BTActionIdle(4.0f / m_agentComponent->data().speed, &m_currentAction, root));
     root->addChild(new BTSetData([this](){return this->m_agentComponent->data().harvestedWood += 1.0f;}, root));
 
     return root;
