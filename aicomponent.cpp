@@ -11,8 +11,8 @@
 #include "btseektreeaction.h"
 #include "btwalkrandom.h"
 
-AIComponent::AIComponent(PositionComponent *positionComponent, Map *gameMap, AgentComponent *agentComponent)
-    : Component (ComponentType::AIComponent), m_positionComponent(positionComponent), m_agentComponent(agentComponent), m_gameMap(gameMap)
+AIComponent::AIComponent(RenderComponent *renderComponent, PositionComponent *positionComponent, Map *gameMap, AgentComponent *agentComponent)
+    : Component (ComponentType::AIComponent), m_renderComponent(renderComponent), m_positionComponent(positionComponent), m_agentComponent(agentComponent), m_gameMap(gameMap)
 {
     generateBehaviorTree();
 }
@@ -68,8 +68,10 @@ BTNode *AIComponent::createRestingTree(BTNode *parent)
 {
     BTSequence* root = new BTSequence(parent);
     root->addChild(new BTRestingAction(m_agentComponent, m_positionComponent, m_gameMap, &m_currentAction, root));
+    root->addChild(new BTSetData([this](){this->m_renderComponent->setVisibility(false);}, root));
     root->addChild(new BTActionIdle(10.0f, &m_currentAction, root));
-    root->addChild(new BTSetData([this](){return this->m_agentComponent->data().health = 100;}, root));
+    root->addChild(new BTSetData([this](){this->m_renderComponent->setVisibility(true);}, root));
+    root->addChild(new BTSetData([this](){this->m_agentComponent->data().health = 100;}, root));
 
     return root;
 }
@@ -78,7 +80,9 @@ BTNode *AIComponent::createEatingTree(BTNode *parent)
 {
     BTSequence* root = new BTSequence(parent);
     root->addChild(new BTRestingAction(m_agentComponent, m_positionComponent, m_gameMap, &m_currentAction, root));
+    root->addChild(new BTSetData([this](){this->m_renderComponent->setVisibility(false);}, root));
     root->addChild(new BTActionIdle(2.0f, &m_currentAction, root));
+    root->addChild(new BTSetData([this](){this->m_renderComponent->setVisibility(true);}, root));
     root->addChild(new BTSetData([this](){return this->m_agentComponent->data().hunger = 0;}, root));
 
     return root;
@@ -89,7 +93,7 @@ BTNode *AIComponent::createLazyTree(BTNode *parent)
     BTSequence* root = new BTSequence(parent);
 
     root->addChild(new BTWalkRandom(m_agentComponent, m_positionComponent, m_gameMap, &m_currentAction, root));
-    root->addChild(new BTActionIdle(2.0f, &m_currentAction, root));
+    root->addChild(new BTActionIdle(2.0f * (0.5 + QRandomGenerator::global()->generateDouble()), &m_currentAction, root));
 
     return root;
 }

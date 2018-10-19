@@ -18,12 +18,14 @@ public:
     ~RenderComponent();
     void render(QOpenGLShaderProgram *program);
     void init();
+    void setVisibility(bool visible);
 private:
     SpriteComponent* m_spriteComponent;
     PositionComponent* m_positionComponent;
 
     QOpenGLBuffer m_vbo;
     QOpenGLTexture *m_texture;
+    bool m_visible = true;
 };
 
 #endif // RENDERCOMPONENT_H

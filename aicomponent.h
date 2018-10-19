@@ -5,6 +5,7 @@
 
 #include "positioncomponent.h"
 #include "agentcomponent.h"
+#include "rendercomponent.h"
 #include "btroot.h"
 #include "btnode.h"
 #include "btaction.h"
@@ -13,7 +14,7 @@
 class AIComponent : public Component
 {
 public:
-    AIComponent(PositionComponent *positionComponent, Map* gameMap, AgentComponent *agentComponent);
+    AIComponent(RenderComponent *renderComponent, PositionComponent *positionComponent, Map* gameMap, AgentComponent *agentComponent);
 
     void update();
 
@@ -24,6 +25,7 @@ private:
     BTNode* createEatingTree(BTNode* parent);
     BTNode* createLazyTree(BTNode* parent);
 
+    RenderComponent *m_renderComponent = nullptr;
     PositionComponent *m_positionComponent = nullptr;
     AgentComponent *m_agentComponent = nullptr;
     BTRoot *m_treeRoot = nullptr;

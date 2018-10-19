@@ -81,8 +81,9 @@ void MainWindow::loadCharacters()
         PositionComponent *posComp = new PositionComponent(QPointF(8.0f, 8.0f));
         character->setComponent(ComponentType::SpriteComponent, spriteComp);
         character->setComponent(ComponentType::PositionComponent, posComp);
-        character->setComponent(ComponentType::RenderComponent, new RenderComponent(spriteComp, posComp));
-        character->setComponent(ComponentType::AIComponent, new AIComponent(posComp, m_gameMap, agentComp));
+        RenderComponent *renderComp = new RenderComponent(spriteComp, posComp);
+        character->setComponent(ComponentType::RenderComponent, renderComp);
+        character->setComponent(ComponentType::AIComponent, new AIComponent(renderComp, posComp, m_gameMap, agentComp));
         m_entities.push_back(character);
         m_characters.push_back(character);
    }
